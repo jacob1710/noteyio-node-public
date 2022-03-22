@@ -1,0 +1,39 @@
+# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Node.js CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+defaults:
+  run:
+    working-directory: backend
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-18.04
+    #runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        node-version: '16'
+    - name: Build the DB
+      run: docker-compose up -d
+    - name: Run server tests
+      run: docker exec node npm test
+  docker:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Publish to Registry
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        workdir: backend
+        name: jacobinho/noteyio-node_node
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
