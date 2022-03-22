@@ -1,4 +1,6 @@
+
 # noteyio-node
+Note: This project has been cloned from the private repository, but sensitive information has been removed, this means the pipeline might not run as it needs the credentials to successfully complete
 
 ## About NoteyIO
 
