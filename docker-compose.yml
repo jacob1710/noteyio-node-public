@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  db:
+    image : jacobinho/mongo
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: gtHXAMU77y4s4ZyT
+    volumes:
+    - mongodb_data_container:/noteyiodb
+    ports:
+    - 27017:27017
+  # https://blog.logrocket.com/node-js-docker-improve-dx
+  node:
+    image: jacobinho/noteyio-node_node
+    container_name: node
+    build:
+      context: ./backend
+    # volumes:
+    #   - .:/src
+    ports:
+      - 3000:3000
+    # depends_on:
+    #   - "mongodb"
+    volumes:
+      - ./:/code
+volumes:
+  mongodb_data_container:
